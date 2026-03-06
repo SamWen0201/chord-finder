@@ -1,13 +1,20 @@
 <template>
-  <div>
-    <h1>Chord Finder</h1>
-    <p>in the template tag</p>
-  </div>
+  <h1>{{ title }}</h1>
+  <ChordSelector></ChordSelector>
 </template>
 
 <script>
+import ChordSelector from "./components/ChordSelector.vue";
+
 export default {
-  name: "App",
+  components: {
+    ChordSelector,
+  },
+  data() {
+    return {
+      title: "Chord Finder",
+    };
+  },
 };
 </script>
 
