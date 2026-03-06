@@ -1,6 +1,8 @@
 <template>
-  <h1>{{ title }}</h1>
-  <ChordSelector></ChordSelector>
+  <div class="container">
+    <h1>{{ title }}</h1>
+    <ChordSelector></ChordSelector>
+  </div>
 </template>
 
 <script>
@@ -18,4 +20,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped lang="scss">
+.container {
+  padding-top: 1rem;
+}
+</style>

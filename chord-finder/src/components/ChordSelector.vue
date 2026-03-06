@@ -1,114 +1,91 @@
 <template>
-  <div>{{ selectedRoot }} {{ selectedChordType }}</div>
-  <h2>{{ selectedChord }}</h2>
-
-  <form class="form">
-    <label for="selectedRoot">root note:</label>
-    <select v-model="selectedRoot" id="selectedRoot" @change="updateChord">
-      <option disabled value>Please choose a root note</option>
-      <option v-for="(rootNote, index) in rootNotes" :key="index">
-        {{ rootNote }}
-      </option>
-    </select>
-
-    <label for="selectedChordType">chord type:</label>
-    <select
-      v-model="selectedChordType"
-      id="selectedChordType"
-      @change="updateChord"
-    >
-      <option disabled value>Please choose a chord type</option>
-      <option v-for="(chordType, index) in chordTypes" :key="index">
-        {{ chordType }}
-      </option>
-    </select>
-  </form>
+  <section class="container chord-selector">
+    <!-- Chord Selector Form -->
+    <form class="form mb-5">
+      <div class="row mb-3">
+        <label for="selectedRoot" class="col-sm-4 col-form-label"
+          >root note:</label
+        >
+        <div class="col-sm-8">
+          <select
+            v-model="selectedRoot"
+            id="selectedRoot"
+            @change="updateChord"
+            class="form-selector form-control"
+          >
+            <option disabled value>Please choose a root note</option>
+            <option v-for="(note, index) in notes" :key="index">
+              {{ note }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="selectedChordType" class="col-sm-4 col-form-label"
+          >chord type:</label
+        >
+        <div class="col-sm-8">
+          <select
+            v-model="selectedChordType"
+            id="selectedChordType"
+            @change="updateChord"
+            class="form-selector form-control"
+          >
+            <option disabled value>Please choose a chord type</option>
+            <option v-for="(chordType, index) in chordTypes" :key="index">
+              {{ chordType.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </form>
+    <!-- <p class="chord-selector__result">
+      The {{ selectedRoot }} {{ selectedChordType }} chord is
+      {{ selectedChord }}
+    </p> -->
+    <PianoKeyBoard
+      :selectedNotes="selectedNotes"
+      :notes="notes"
+    ></PianoKeyBoard>
+  </section>
 </template>
 
 <script>
+import PianoKeyBoard from "../components/PianoKeyBoard.vue";
+
 export default {
+  components: {
+    PianoKeyBoard,
+  },
   data() {
     return {
-      rootNotes: [
-        "C",
-        "C#",
-        "D",
-        "D#",
-        "E",
-        "F",
-        "F#",
-        "G",
-        "G#",
-        "A",
-        "A#",
-        "B",
-      ],
+      notes: ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
       selectedRoot: "C",
-      chordTypes: ["major", "minor", "sus2", "sus4"],
+      chordTypes: [
+        { name: "major", interval: [4, 7] },
+        { name: "minor", interval: [3, 7] },
+        { name: "sus2", interval: [2, 7] },
+        { name: "sus4", interval: [5, 7] },
+      ],
       selectedChordType: "major",
-      selectedChord: "CEG",
+      selectedNotes: ["C", "E", "G"],
     };
   },
   methods: {
     updateChord() {
       // 以目前選取的 根音為起點 加上和弦種類對應的 interval 獲得想要的和弦
-      const first = this.rootNotes.findIndex(
-        (note) => this.selectedRoot === note,
+      const first = this.notes.findIndex((note) => this.selectedRoot === note);
+
+      // choose the right chord in chordTypes[]
+      const selectedChord = this.chordTypes.find(
+        (chordType) => this.selectedChordType === chordType.name,
       );
 
-      if (this.selectedChordType === "major") {
-        const third =
-          first + 4 >= this.rootNotes.length
-            ? first + 4 - this.rootNotes.length
-            : first + 4;
-        const fifth =
-          first + 7 >= this.rootNotes.length
-            ? first + 7 - this.rootNotes.length
-            : first + 7;
-
-        this.selectedChord =
-          this.rootNotes[first] + this.rootNotes[third] + this.rootNotes[fifth];
-      }
-      if (this.selectedChordType === "minor") {
-        const third =
-          first + 3 >= this.rootNotes.length
-            ? first + 3 - this.rootNotes.length
-            : first + 3;
-        const fifth =
-          first + 7 >= this.rootNotes.length
-            ? first + 7 - this.rootNotes.length
-            : first + 7;
-
-        this.selectedChord =
-          this.rootNotes[first] + this.rootNotes[third] + this.rootNotes[fifth];
-      }
-      if (this.selectedChordType === "sus2") {
-        const third =
-          first + 2 >= this.rootNotes.length
-            ? first + 2 - this.rootNotes.length
-            : first + 2;
-        const fifth =
-          first + 7 >= this.rootNotes.length
-            ? first + 7 - this.rootNotes.length
-            : first + 7;
-
-        this.selectedChord =
-          this.rootNotes[first] + this.rootNotes[third] + this.rootNotes[fifth];
-      }
-      if (this.selectedChordType === "sus4") {
-        const third =
-          first + 5 >= this.rootNotes.length
-            ? first + 5 - this.rootNotes.length
-            : first + 5;
-        const fifth =
-          first + 7 >= this.rootNotes.length
-            ? first + 7 - this.rootNotes.length
-            : first + 7;
-
-        this.selectedChord =
-          this.rootNotes[first] + this.rootNotes[third] + this.rootNotes[fifth];
-      }
-      console.log("Update Chord: " + this.selectedChord);
+      this.selectedNotes[0] = this.selectedRoot;
+      this.selectedNotes[1] =
+        this.notes[(first + selectedChord.interval[0]) % 12];
+      this.selectedNotes[2] =
+        this.notes[(first + selectedChord.interval[1]) % 12];
     },
   },
 
@@ -118,4 +95,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped lang="scss">
+.chord-selector {
+  max-width: 35rem; // 540px
+  &__result {
+    font-size: 1.6rem;
+  }
+}
+</style>
