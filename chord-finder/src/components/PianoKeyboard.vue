@@ -15,7 +15,7 @@
             active: selectedNotes.includes(note.blackKey),
           }"
         ></div>
-        {{ note.name }}
+        <!-- <span class="piano__note-name">{{ note.name }}</span> -->
       </div>
     </div>
   </div>
@@ -60,6 +60,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "../assets/customscss/variables";
 // vraibles
 // layout
 $white-key-gap: 0.2rem;
@@ -69,13 +70,17 @@ $key-lighten-green: rgb(156, 249, 17);
 
 // style
 .piano-container {
-  max-width: 35rem; // 540px
-  background-color: rgb(10, 10, 85);
+  // max-width: 35rem; // 540px
+  background-color: rgb(2, 2, 24);
   color: #fff;
   height: 15rem; // 暫時 320px
   // border-radius: 5px;
   overflow: hidden;
-  box-shadow: 0 1rem 2rem rgba(#5a5353, 0.1);
+  box-shadow: 0 1rem 2rem rgba(#000, 0.2);
+
+  @media only screen and (max-width: 600px) {
+    height: 10rem;
+  }
 }
 .piano {
   display: flex;
@@ -91,6 +96,11 @@ $key-lighten-green: rgb(156, 249, 17);
     text-align: center;
 
     transition: all 0.3s;
+
+    // align the text
+    display: grid;
+    align-content: end;
+    justify-content: center;
   }
   &__black-key {
     position: absolute;
@@ -103,10 +113,16 @@ $key-lighten-green: rgb(156, 249, 17);
     z-index: 10;
 
     transition: all 0.3s;
+
+    @media only screen and (max-width: 600px) {
+      width: 2rem;
+    }
+  }
+  &__note-name {
   }
 }
 
 .active {
-  background-color: $key-lighten-green;
+  background-color: $primary;
 }
 </style>

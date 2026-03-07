@@ -1,7 +1,16 @@
 <template>
   <div class="container-md">
-    <h1 class="text-center display-1">{{ title }}</h1>
-    <ChordSelector></ChordSelector>
+    <div class="row mb-3 mt-3">
+      <div class="col">
+        <h1 class="text-center display-1">{{ title }}</h1>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <ChordSelector></ChordSelector>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -19,7 +28,13 @@ export default {
   },
 };
 </script>
-
+<style>
+/* html {
+  @media only screen and (max-width: 600px) {
+    font-size: 50%;
+  }
+} */
+</style>
 <style scoped lang="scss">
 .container {
   padding-top: 1rem;
