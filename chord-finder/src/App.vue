@@ -1,8 +1,8 @@
 <template>
   <div class="container-md">
-    <div class="row mb-3 mt-3">
+    <div class="row mb-3 mt-5">
       <div class="col">
-        <h1 class="text-center display-1">{{ title }}</h1>
+        <h1 class="text-center">{{ title }}</h1>
       </div>
     </div>
 
