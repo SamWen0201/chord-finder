@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <h1>{{ title }}</h1>
+  <div class="container-md">
+    <h1 class="text-center display-1">{{ title }}</h1>
     <ChordSelector></ChordSelector>
   </div>
 </template>

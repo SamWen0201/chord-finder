@@ -1,5 +1,5 @@
 <template>
-  <section class="container chord-selector">
+  <div class="chord-selector container">
     <!-- Chord Selector Form -->
     <form class="form mb-5">
       <div class="row mb-3">
@@ -47,11 +47,11 @@
       :selectedNotes="selectedNotes"
       :notes="notes"
     ></PianoKeyBoard>
-  </section>
+  </div>
 </template>
 
 <script>
-import PianoKeyBoard from "../components/PianoKeyBoard.vue";
+import PianoKeyBoard from "../components/PianoKeyboard.vue";
 
 export default {
   components: {
@@ -97,7 +97,6 @@ export default {
 
 <style scoped lang="scss">
 .chord-selector {
-  max-width: 35rem; // 540px
   &__result {
     font-size: 1.6rem;
   }

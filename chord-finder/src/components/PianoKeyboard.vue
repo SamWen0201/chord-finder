@@ -1,40 +1,21 @@
-<!-- 
- notes: ["C",
-        "C#",
-        "D",
-        "D#",
-        "E",
-        "F",
-        "F#",
-        "G",
-        "G#",
-        "A",
-        "A#",
-        "B",] 
--->
 <template>
-  <!-- <div>{{ selectedNotes }}</div> -->
   <div class="piano-container">
     <div class="piano">
       <div
         class="piano__white-key"
-        v-for="note in whiteKeyNote"
-        :key="note"
-        :id="note"
-        :class="{ active: this.selectedNotes.includes(note) }"
+        v-for="note in whiteKeyNotesOb"
+        :key="note.name"
+        :class="{ active: selectedNotes.includes(note.name) }"
       >
         <div
           class="piano__black-key"
-          v-if="note !== 'E' && note !== 'B'"
-          :key="notes[notes.findIndex((curNote) => curNote === note) + 1]"
-          :id="notes[notes.findIndex((curNote) => curNote === note) + 1]"
+          v-if="note.blackKey"
+          :key="note.blackKey"
           :class="{
-            active: this.selectedNotes.includes(
-              notes[notes.findIndex((curNote) => curNote === note) + 1],
-            ),
+            active: selectedNotes.includes(note.blackKey),
           }"
         ></div>
-        {{ note }}
+        {{ note.name }}
       </div>
     </div>
   </div>
@@ -49,25 +30,52 @@ export default {
   },
   methods: {},
   computed: {
-    whiteKeyNote() {
-      return this.notes.filter((note) => note.length === 1);
+    whiteKeyNotesOb() {
+      const whiteKeyNotes = this.notes.filter((note) => note.length === 1);
+      // 目前的 whiteKeyNotes = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
+
+      const whiteKeyNotesOb = whiteKeyNotes.map((whiteKeyNote) => {
+        // 因為黑鍵存在的位置是固定的，所以將 whiteKeyNotes 原始的 string 物件，讓白鍵綁定黑鍵
+        // 陣列元素會變成 物件 e.g., {name: 'C', blackKey:'C#'} {name: B, blackKey: ''}
+
+        if (whiteKeyNote !== "E" && whiteKeyNote !== "B") {
+          return {
+            name: whiteKeyNote,
+            blackKey:
+              this.notes[
+                this.notes.findIndex((note) => whiteKeyNote === note) + 1
+              ],
+          };
+        } else {
+          return {
+            name: whiteKeyNote,
+            blackKey: "",
+          };
+        }
+      });
+      return whiteKeyNotesOb;
     },
   },
 };
 </script>
+
 <style scoped lang="scss">
-// variables
+// vraibles
+// layout
 $white-key-gap: 0.2rem;
+
+// color
+$key-lighten-green: rgb(156, 249, 17);
 
 // style
 .piano-container {
-  // width: 516px
+  max-width: 35rem; // 540px
   background-color: rgb(10, 10, 85);
   color: #fff;
-  height: 20rem; // 暫時 320px
+  height: 15rem; // 暫時 320px
   // border-radius: 5px;
   overflow: hidden;
-  box-shadow: 0 1rem 2rem rgba(#000, 0.1);
+  box-shadow: 0 1rem 2rem rgba(#5a5353, 0.1);
 }
 .piano {
   display: flex;
@@ -81,6 +89,8 @@ $white-key-gap: 0.2rem;
     position: relative;
     color: #000;
     text-align: center;
+
+    transition: all 0.3s;
   }
   &__black-key {
     position: absolute;
@@ -91,10 +101,12 @@ $white-key-gap: 0.2rem;
     top: 0;
     transform: translateX(50%);
     z-index: 10;
+
+    transition: all 0.3s;
   }
 }
 
 .active {
-  background-color: greenyellow;
+  background-color: $key-lighten-green;
 }
 </style>
