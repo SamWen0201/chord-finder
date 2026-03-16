@@ -9,6 +9,7 @@
     <div class="row">
       <div class="col">
         <ChordSelector></ChordSelector>
+        <RandomNotesGenerator></RandomNotesGenerator>
       </div>
     </div>
   </div>
@@ -16,10 +17,12 @@
 
 <script>
 import ChordSelector from "./components/ChordSelector.vue";
+import RandomNotesGenerator from "./components/RandomNotesGenerator.vue";
 
 export default {
   components: {
     ChordSelector,
+    RandomNotesGenerator,
   },
   data() {
     return {

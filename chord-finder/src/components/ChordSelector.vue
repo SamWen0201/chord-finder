@@ -3,6 +3,7 @@
     <div class="row justify-content-center mb-sm-3 mb-md-4">
       <div class="col col-lg-6">
         <!-- Chord Selector Form -->
+
         <form class="chord-selector__form mb-3">
           <div class="row mb-3">
             <label for="selectedRoot" class="col-sm-4 col-form-label"
@@ -70,11 +71,15 @@
         ></PianoKeyBoard>
       </div>
     </div>
+
+    <!-- WHOLE NOTES IN PIANO TEST -->
   </div>
 </template>
 
 <script>
 import PianoKeyBoard from "../components/PianoKeyboard.vue";
+import { WHOLE_PIANO_NOTES } from "./notes";
+import * as Tone from "tone";
 
 export default {
   components: {
@@ -83,6 +88,7 @@ export default {
   data() {
     return {
       notes: ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
+
       selectedRoot: "C",
       chordTypes: [
         { name: "major", interval: [4, 7] },
