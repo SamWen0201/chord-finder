@@ -1,19 +1,17 @@
 <template>
   <div class="randomNotesGenerator container">
-    <!-- WHOLE PIANO NOTES A0->C8 -->
-    <!-- <div class="row mt-5">
+    <div class="row">
       <div class="col">
-        <ul>
-          <li v-for="noteObj in notesObj">
-            <div type="button" @click="triggerSingleNote(noteObj)">
-              {{ noteObj.name }} {{ noteObj.octave }}
-            </div>
-          </li>
-        </ul>
+        <form @submit.prevent="answer().submit" v-if="status">
+          <input v-model="ansNotesString" />
+          <button type="button" @click="answer().clear">clear</button>
+          <button type="submit">submit</button>
+          <button type="button" @click="triggerNotes(ansNotes)">play</button>
+          <span class="d-inline-block ml-5">{{ status }}</span>
+        </form>
       </div>
-    </div> -->
+    </div>
 
-    <!--  -->
     <div class="row">
       <div class="col">
         <button type="button" @click="startAudio" v-if="status === ''">
@@ -22,15 +20,19 @@
       </div>
       <div class="col">
         <div v-if="status">
-          <button type="button" @click="triggerNotes">Play</button>
+          <button type="button" @click="triggerNotes(currentNotes.notesObj)">
+            Play
+          </button>
           <button type="button" @click="changeCurrentNotes">Next one</button>
         </div>
       </div>
+
+      <!-- notesBtnContainer -->
       <div class="col">
         <div class="notesBtnContainer" v-if="status">
-          <ul>
+          <ul class="d-flex list-unstyled">
             <li v-for="noteObj in currentNotesBtn.notesObj">
-              <button type="button" @click="triggerSingleNote(noteObj)">
+              <button type="button" @click="answer(noteObj).answer">
                 {{ noteObj.name }}{{ noteObj.octave }}
               </button>
             </li>
@@ -53,20 +55,17 @@ import {
 import * as Tone from "tone";
 export default {
   mounted() {
-    this.inithNotesBtn();
+    this.initNotesBtn();
     console.log("Initialize Notes button on the page");
   },
+
   data() {
     return {
       typeOfNotes: WHOLE_PIANO_NOTES, // < WHOLE_PIANO_NOTES || generateNotesByOctaveRange() ||  generateNotesByRange()
       currentNotes: {
         type: "", // < ’’ || ‘major’ || ‘minor’ || ‘sus2’ || … >”, 空字串代表目前沒有選擇和弦類型（因為是屬於隨機）
         amount: 1,
-        notesObj: [
-          { name: "C", octave: 4 },
-          { name: "F", octave: 4 },
-          { name: "G", octave: 4 },
-        ],
+        notesObj: [{ name: "C", octave: 4 }],
       },
       currentNotesBtn: {
         notesObj: [], // string array includes C ->  B
@@ -75,6 +74,11 @@ export default {
       ansNotes: [],
       status: "", // < "" ,‘wrong’ || ‘correct’ || ‘answering’ > 分別代表還沒開始、答題錯誤、正確、答題中等
     };
+  },
+  watch: {
+    "currentNotes.notesObj"() {
+      this.triggerNotes(this.currentNotes.notesObj);
+    },
   },
   methods: {
     async startAudio() {
@@ -90,18 +94,16 @@ export default {
       synth.triggerAttack(noteObj.name + noteObj.octave, now);
       synth.triggerRelease(now + 1);
     },
-    triggerNotes() {
+    triggerNotes(notesObj) {
       const synth = new Tone.PolySynth(Tone.Synth).toDestination();
       const now = Tone.now();
 
-      this.currentNotes.notesObj.forEach((noteObj) => {
+      notesObj.forEach((noteObj) => {
         synth.triggerAttack(noteObj.name + noteObj.octave, now);
       });
 
       synth.triggerRelease(
-        this.currentNotes.notesObj.map(
-          (noteObj) => noteObj.name + noteObj.octave,
-        ),
+        notesObj.map((noteObj) => noteObj.name + noteObj.octave),
         now + 1,
       );
     },
@@ -110,8 +112,10 @@ export default {
         this.typeOfNotes,
         this.currentNotes.amount,
       );
+      this.ansNotes = [];
+      this.status = "answering";
     },
-    inithNotesBtn() {
+    initNotesBtn() {
       this.currentNotesBtn.notesObj = generateNotesByOctave(4);
       this.currentNotesBtn.octave = 4;
     },
@@ -132,6 +136,43 @@ export default {
           this.currentNotesBtn.octave--;
         },
       };
+    },
+    answer(noteObj) {
+      return {
+        answer: () => {
+          this.triggerSingleNote(noteObj);
+          this.ansNotes.push(noteObj);
+        },
+        clear: () => {
+          this.ansNotes = [];
+        },
+        submit: () => {
+          let status = "wrong";
+          if (this.ansNotes.length !== this.currentNotes.amount) {
+            this.status = status;
+            return;
+          }
+
+          this.ansNotes.forEach((noteObj, index) => {
+            if (
+              noteObj.name === this.currentNotes.notesObj[index].name &&
+              noteObj.octave === this.currentNotes.notesObj[index].octave
+            ) {
+              status = "correct";
+            } else {
+              status = "wrong";
+            }
+          });
+          this.status = status;
+        },
+      };
+    },
+  },
+  computed: {
+    ansNotesString() {
+      return this.ansNotes
+        .map((noteObj) => noteObj.name + noteObj.octave)
+        .toString();
     },
   },
 };
