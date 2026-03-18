@@ -123,6 +123,6 @@ $key-lighten-green: rgb(156, 249, 17);
 }
 
 .active {
-  background-color: $primary;
+  background-color: #4caf50;
 }
 </style>

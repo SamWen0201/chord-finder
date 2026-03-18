@@ -78,8 +78,6 @@
 
 <script>
 import PianoKeyBoard from "../components/PianoKeyboard.vue";
-import { WHOLE_PIANO_NOTES } from "./notes";
-import * as Tone from "tone";
 
 export default {
   components: {
@@ -146,7 +144,7 @@ export default {
     margin-left: 1rem;
   }
   &__selected-note {
-    background-color: $primary;
+    background-color: #4caf50;
     color: #fff;
     display: flex;
     justify-content: center;
