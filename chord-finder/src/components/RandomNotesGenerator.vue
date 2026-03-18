@@ -1,18 +1,8 @@
 <template>
-  <div class="randomNotesGenerator container text-center">
-    <!-- <div class="row">
-      <div class="col">
-        <button
-          type="button"
-          @click="startAudio"
-          v-if="status === ''"
-          class="btn btn-primary"
-        >
-          Start Listening
-        </button>
-      </div>
-    </div> -->
-
+  <div class="randomNotesGenerator container text-center py-5">
+    <div class="row">
+      <h2 class="col mb-4">Random Notes Generator</h2>
+    </div>
     <div class="row mb-3">
       <div class="col">
         <div class="card randomNotesGenerator__question mx-auto">
@@ -21,7 +11,7 @@
               v-if="status"
               type="button"
               @click="triggerPolyNotes(currentNotes.notesObj)"
-              class="btn btn-primary"
+              class="btn btn-primary btn--music"
             >
               <Music /> Play
             </button>
@@ -296,7 +286,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-@use "../assets/customscss/variables" as *;
+@import "../assets/customscss/variables";
 
 .randomNotesGenerator {
   max-width: 33.75rem; // 540px
@@ -337,6 +327,24 @@ export default {
 
     &:active {
       transform: translateY(0.2rem);
+      box-shadow: 0 1rem 4rem rgba(#000, 0.2);
+      background-color: rgba($primary, 0.8) !important;
+      color: #ffffff !important;
+    }
+  }
+
+  // music play btn
+  &--music {
+    background-color: $primary;
+    border: 1px solid $primary;
+    transition: all 0.3s;
+    &:hover {
+      background-color: rgba($primary, 0.8);
+      color: #ffffff;
+    }
+
+    &:active {
+      border: 1px solid $primary;
       box-shadow: 0 1rem 4rem rgba(#000, 0.2);
       background-color: rgba($primary, 0.8) !important;
       color: #ffffff !important;

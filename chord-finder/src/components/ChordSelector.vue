@@ -1,5 +1,8 @@
 <template>
-  <div class="chord-selector container">
+  <div class="chord-selector container py-5">
+    <div class="row">
+      <h2 class="col mb-4 text-center">Chord Selector</h2>
+    </div>
     <div class="row justify-content-center mb-sm-3 mb-md-4">
       <div class="col col-lg-6">
         <!-- Chord Selector Form -->
