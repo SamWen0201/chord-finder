@@ -1,5 +1,8 @@
 <template>
-  <div class="chord-selector container">
+  <div class="chord-selector container py-5">
+    <div class="row">
+      <h2 class="col mb-4 text-center">Chord Selector</h2>
+    </div>
     <div class="row justify-content-center mb-sm-3 mb-md-4">
       <div class="col col-lg-6">
         <!-- Chord Selector Form -->
@@ -78,8 +81,6 @@
 
 <script>
 import PianoKeyBoard from "../components/PianoKeyboard.vue";
-import { WHOLE_PIANO_NOTES } from "./notes";
-import * as Tone from "tone";
 
 export default {
   components: {
@@ -146,7 +147,7 @@ export default {
     margin-left: 1rem;
   }
   &__selected-note {
-    background-color: $primary;
+    background-color: #4caf50;
     color: #fff;
     display: flex;
     justify-content: center;
