@@ -70,7 +70,7 @@ $key-lighten-green: rgb(156, 249, 17);
 
 // style
 .piano-container {
-  // max-width: 35rem; // 540px
+  width: 35rem; // 540px
   background-color: rgb(2, 2, 24);
   color: #fff;
   height: 15rem; // 暫時 320px
@@ -123,6 +123,6 @@ $key-lighten-green: rgb(156, 249, 17);
 }
 
 .active {
-  background-color: $primary;
+  background-color: #4caf50;
 }
 </style>
