@@ -75,7 +75,7 @@
     </div>
 
     <div class="row justify-content-center">
-      <div class="col col-xxl-10">
+      <div class="col col-xxl-10 col-piano">
         <PianoKeyBoard :selectedNotes="selectedNotes"></PianoKeyBoard>
       </div>
     </div>
@@ -186,6 +186,12 @@ export default {
     height: 2.8rem;
     border-radius: 50%;
     box-shadow: 0 1rem 2rem rgba(#000, 0.2);
+  }
+}
+.col-piano {
+  @media only screen and (max-width: 37.5em) {
+    // height: 4rem;
+    overflow: scroll;
   }
 }
 </style>

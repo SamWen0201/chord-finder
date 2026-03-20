@@ -98,7 +98,7 @@ $key-lighten-green: rgb(156, 249, 17);
 
 // style
 .piano-container {
-  width: 100%; // 540px
+  width: 100%;
   background-color: rgb(2, 2, 24);
   color: #fff;
   height: 12rem; // 暫時 192px
@@ -110,9 +110,7 @@ $key-lighten-green: rgb(156, 249, 17);
 
   @media only screen and (max-width: 37.5em) {
     height: 7rem;
-  }
-  @media only screen and (max-width: 31.25em) {
-    height: 4rem;
+    width: 600px;
   }
 }
 .piano {
@@ -152,11 +150,7 @@ $key-lighten-green: rgb(156, 249, 17);
     }
 
     @media only screen and (max-width: 37.5em) {
-      width: 1rem;
-    }
-
-    @media only screen and (max-width: 31.25em) {
-      width: 0.8rem;
+      width: 1.2rem;
     }
   }
   &__37-key {
