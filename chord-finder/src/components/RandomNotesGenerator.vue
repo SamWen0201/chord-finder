@@ -156,7 +156,8 @@ import {
 } from "../utils/notes";
 
 // import tone.js library
-import * as Tone from "tone";
+// import * as Tone from "tone";
+import { triggerPolyNotes, triggerSingleNote } from "@/utils/toneTirgger";
 
 export default {
   mounted() {
@@ -182,35 +183,13 @@ export default {
   },
   watch: {
     "currentNotes.notesObj"() {
-      this.triggerPolyNotes(this.currentNotes.notesObj);
+      triggerPolyNotes(this.currentNotes.notesObj);
     },
   },
   methods: {
     async startAudio() {
       await Tone.start();
       this.status = "answering";
-    },
-    triggerSingleNote(noteObj) {
-      //create a synth and connect it to the main output (your speakers)
-      const synth = new Tone.Synth().toDestination();
-      const now = Tone.now();
-
-      //play a middle 'C' for the duration of an 8th note
-      synth.triggerAttack(noteObj.name + noteObj.octave, now);
-      synth.triggerRelease(now + 1);
-    },
-    triggerPolyNotes(notesObj) {
-      const synth = new Tone.PolySynth(Tone.Synth).toDestination();
-      const now = Tone.now();
-
-      notesObj.forEach((noteObj) => {
-        synth.triggerAttack(noteObj.name + noteObj.octave, now);
-      });
-
-      synth.triggerRelease(
-        notesObj.map((noteObj) => noteObj.name + noteObj.octave),
-        now + 1,
-      );
     },
     changeCurrentNotes() {
       this.currentNotes.notesObj = getRandomNotes(
@@ -248,7 +227,8 @@ export default {
       return {
         answer: () => {
           if (this.status === "correct") return;
-          this.triggerSingleNote(noteObj);
+          triggerSingleNote(noteObj);
+          // this.triggerSingleNote(noteObj);
           this.ansNotes.push(noteObj);
         },
         clear: () => {

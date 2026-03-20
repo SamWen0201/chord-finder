@@ -1,10 +1,10 @@
 <template>
-  <div class="chord-selector container py-5">
+  <div class="chord-selector container-lg py-5">
     <div class="row">
       <h2 class="col mb-4 text-center">Chord Selector</h2>
     </div>
     <div class="row justify-content-center mb-sm-3 mb-md-4">
-      <div class="col col-lg-6">
+      <div class="col col-lg-6 col-md-7 col-sm-8">
         <!-- Chord Selector Form -->
 
         <form class="chord-selector__form mb-3">
@@ -16,12 +16,16 @@
               <select
                 v-model="selectedRoot"
                 id="selectedRoot"
-                @change="updateChord"
+                @change="updateSelectedNotes"
                 class="form-select chord-selector__select"
               >
-                <option disabled value>Please choose a root note</option>
-                <option v-for="(note, index) in notes" :key="index">
-                  {{ note }}
+                <option disabled>Please choose a root note</option>
+                <option
+                  v-for="(note, index) in notesList"
+                  :key="index"
+                  :value="note"
+                >
+                  {{ note.name }}
                 </option>
               </select>
             </div>
@@ -34,11 +38,15 @@
               <select
                 v-model="selectedChordType"
                 id="selectedChordType"
-                @change="updateChord"
+                @change="updateSelectedNotes"
                 class="form-select chord-selector__select"
               >
-                <option disabled value>Please choose a chord type</option>
-                <option v-for="(chordType, index) in chordTypes" :key="index">
+                <option disabled>Please choose a chord type</option>
+                <option
+                  v-for="(chordType, index) in chordTypes"
+                  :key="index"
+                  :value="chordType"
+                >
                   {{ chordType.name }}
                 </option>
               </select>
@@ -55,23 +63,20 @@
         <span class="text-body-tertiary">Notes in chord:</span>
         <ul class="chord-selector__selected-notes-list list-unstyled">
           <li
-            v-for="selectedNote in selectedNotes"
-            :key="selectedNote"
-            v-if="selectedNotes"
+            v-for="note in notesArranged"
+            :key="note.name"
+            v-if="notesArranged"
             class="chord-selector__selected-note fs-4"
           >
-            {{ selectedNote }}
+            {{ note.name }}
           </li>
         </ul>
       </div>
     </div>
 
     <div class="row justify-content-center">
-      <div class="col col-xl-7 col-lg-8 col-xxl-6">
-        <PianoKeyBoard
-          :selectedNotes="selectedNotes"
-          :notes="notes"
-        ></PianoKeyBoard>
+      <div class="col col-xxl-10 col-piano">
+        <PianoKeyBoard :selectedNotes="selectedNotes"></PianoKeyBoard>
       </div>
     </div>
 
@@ -80,6 +85,11 @@
 </template>
 
 <script>
+// import utils
+import { triggerPolyNotes } from "@/utils/toneTirgger";
+import { generateNotesByRange } from "@/utils/notes";
+
+// import child component
 import PianoKeyBoard from "../components/PianoKeyboard.vue";
 
 export default {
@@ -88,9 +98,8 @@ export default {
   },
   data() {
     return {
-      notes: ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
-
-      selectedRoot: "C",
+      notes: generateNotesByRange("C4", "C6"),
+      selectedRoot: null,
       chordTypes: [
         { name: "major", interval: [4, 7] },
         { name: "minor", interval: [3, 7] },
@@ -99,30 +108,51 @@ export default {
         { name: "diminished", interval: [3, 6] },
         { name: "augmented", interval: [4, 8] },
       ],
-      selectedChordType: "major",
-      selectedNotes: ["C", "E", "G"],
+      selectedChordType: null,
+      selectedNotes: [],
+      inversion: 0, // added in the future
     };
   },
   methods: {
-    updateChord() {
-      // 以目前選取的 根音為起點 加上和弦種類對應的 interval 獲得想要的和弦
-      const first = this.notes.findIndex((note) => this.selectedRoot === note);
-
-      // choose the right chord in chordTypes[]
-      const selectedChord = this.chordTypes.find(
-        (chordType) => this.selectedChordType === chordType.name,
-      );
-
-      this.selectedNotes[0] = this.selectedRoot;
-      this.selectedNotes[1] =
-        this.notes[(first + selectedChord.interval[0]) % 12];
-      this.selectedNotes[2] =
-        this.notes[(first + selectedChord.interval[1]) % 12];
+    updateSelectedNotes() {
+      if (!this.notesArranged) return;
+      if (this.inversion === 0) {
+        this.selectedNotes = [...this.notesArranged];
+        triggerPolyNotes(this.selectedNotes);
+      }
+      // below are other inversions logic
     },
   },
-
   computed: {
-    chord() {},
+    notesList() {
+      // selected 12 notes in  octave 4
+      return this.notes.filter((note) => note.octave === 4);
+    },
+    notesArranged() {
+      // get notes arranged by selected chord type and root note.
+      if (!this.selectedRoot || !this.selectedChordType) return;
+      let notesArranged = [];
+
+      notesArranged.push(this.selectedRoot);
+
+      const intervalList = this.chordTypes.find(
+        (chordType) => chordType.name === this.selectedChordType.name,
+      ).interval;
+
+      intervalList.forEach((interval) =>
+        notesArranged.push(
+          this.notes[
+            this.notes.findIndex(
+              (note) =>
+                note.name === this.selectedRoot.name &&
+                note.octave === this.selectedRoot.octave,
+            ) + interval
+          ],
+        ),
+      );
+
+      return notesArranged;
+    },
   },
 };
 </script>
@@ -156,6 +186,12 @@ export default {
     height: 2.8rem;
     border-radius: 50%;
     box-shadow: 0 1rem 2rem rgba(#000, 0.2);
+  }
+}
+.col-piano {
+  @media only screen and (max-width: 37.5em) {
+    // height: 4rem;
+    overflow: scroll;
   }
 }
 </style>
