@@ -10,7 +10,6 @@
           'piano__37-key': whiteKeyWithBlack.length === 22,
         }"
       >
-        <span>{{ note.name }}{{ note.octave }}</span>
         <div
           class="piano__black-key"
           v-if="note.blackKey"
@@ -18,11 +17,7 @@
           :class="{
             active: isSelected(note.blackKey.name, note.blackKey.octave),
           }"
-        >
-          <span :style="{ color: '#eee' }"
-            >{{ note.blackKey.name }}{{ note.blackKey.octave }}</span
-          >
-        </div>
+        ></div>
         <!-- <span class="piano__note-name">{{ note.name }}</span> -->
       </div>
     </div>
@@ -103,14 +98,19 @@ $key-lighten-green: rgb(156, 249, 17);
 
 // style
 .piano-container {
-  width: 100%; // 540px
+  width: 100%;
   background-color: rgb(2, 2, 24);
   color: #fff;
   height: 12rem; // 暫時 192px
   box-shadow: 0 1rem 2rem rgba(#000, 0.2);
 
-  @media only screen and (max-width: 600px) {
-    height: 10rem;
+  @media only screen and (max-width: 53.125em) {
+    height: 9rem;
+  }
+
+  @media only screen and (max-width: 37.5em) {
+    height: 7rem;
+    width: 600px;
   }
 }
 .piano {
@@ -144,8 +144,13 @@ $key-lighten-green: rgb(156, 249, 17);
 
     transition: all 0.3s;
 
-    @media only screen and (max-width: 600px) {
-      width: 2rem;
+    @media only screen and (max-width: 53.125em) {
+      // 850px
+      width: 1.5rem;
+    }
+
+    @media only screen and (max-width: 37.5em) {
+      width: 1.2rem;
     }
   }
   &__37-key {
