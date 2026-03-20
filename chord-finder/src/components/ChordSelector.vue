@@ -1,10 +1,10 @@
 <template>
-  <div class="chord-selector container py-5">
+  <div class="chord-selector container-lg py-5">
     <div class="row">
       <h2 class="col mb-4 text-center">Chord Selector</h2>
     </div>
     <div class="row justify-content-center mb-sm-3 mb-md-4">
-      <div class="col col-lg-6">
+      <div class="col col-lg-6 col-md-7 col-sm-8">
         <!-- Chord Selector Form -->
 
         <form class="chord-selector__form mb-3">
@@ -68,7 +68,7 @@
             v-if="notesArranged"
             class="chord-selector__selected-note fs-4"
           >
-            {{ note.name }}{{ note.octave }}
+            {{ note.name }}
           </li>
         </ul>
       </div>
