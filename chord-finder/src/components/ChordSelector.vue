@@ -85,8 +85,12 @@
 </template>
 
 <script>
-import PianoKeyBoard from "../components/PianoKeyboard.vue";
+// import utils
+import { triggerPolyNotes } from "@/utils/toneTirgger";
 import { generateNotesByRange } from "@/utils/notes";
+
+// import child component
+import PianoKeyBoard from "../components/PianoKeyboard.vue";
 
 export default {
   components: {
@@ -114,7 +118,7 @@ export default {
       if (!this.notesArranged) return;
       if (this.inversion === 0) {
         this.selectedNotes = [...this.notesArranged];
-        console.log(this.selectedNotes);
+        triggerPolyNotes(this.selectedNotes);
       }
       // below are other inversions logic
     },

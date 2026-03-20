@@ -29,7 +29,9 @@
   </div>
 </template>
 <script>
+// import utils
 import { generateNotesByRange } from "@/utils/notes";
+
 export default {
   props: ["selectedNotes"],
   data() {
