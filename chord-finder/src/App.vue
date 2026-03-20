@@ -1,6 +1,8 @@
 <template>
-  <Navbar v-if="$route.meta.showNav"></Navbar>
-  <RouterView></RouterView>
+  <div>
+    <Navbar v-if="$route.meta.showNav"></Navbar>
+    <RouterView></RouterView>
+  </div>
 </template>
 
 <script>
